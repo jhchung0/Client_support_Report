@@ -30,6 +30,8 @@ namespace Client_support_report_temporary
         string sOPT_AE;
         string REG_ID="";
         string GSTATUS = "CLOSED";
+        bool Sign_of_NotApply_ListBox_Change = false;
+        bool State_support = false;
 
         public Form1()
         {
@@ -43,6 +45,7 @@ namespace Client_support_report_temporary
             DirectoryInfo di1 = new DirectoryInfo(sDirPath);
             if (di1.Exists == false)
             {
+                MessageBox.Show("D:\\!_Support_Report 폴더를 생성합니다. \n 앞으로 .xml 파일 data는 아래에 저장됩니다. "); 
                 di1.Create();
             }
             sXmlFilePath = sDirPath + "\\SupportInfo.xml";
@@ -66,7 +69,6 @@ namespace Client_support_report_temporary
                 btn_Restart_log.Enabled = false;
             }
         }
-
 
         private void btn_AddEdit_common_Click(object sender, EventArgs e)
         // ADD/EDIT 버튼 클릭시 실행하는 모듈 
@@ -365,9 +367,10 @@ namespace Client_support_report_temporary
                     }
                 }
             }
-            // 현재값 Update
-            //Current_Cmb_Texts_Update();
-            //  임시저장 xml 를  Form1_Close시로 변경
+            btn_Start_log.Enabled = true;
+            btn_Restart_log.Enabled = false;
+            btn_Hold_log.Enabled = false;
+            btn_CLOSE_log.Enabled = false;
         }
 
         private void btn_CustUser_Add_Click(object sender, EventArgs e)
@@ -467,6 +470,10 @@ namespace Client_support_report_temporary
                     xmlSettingDoc.Save(sXmlFilePath);
                 }
             }
+            btn_Start_log.Enabled = true;
+            btn_Restart_log.Enabled = false;
+            btn_Hold_log.Enabled = false;
+            btn_CLOSE_log.Enabled = false;
         }
 
 
@@ -481,6 +488,7 @@ namespace Client_support_report_temporary
 
         private void btn_Start_log_Click(object sender, EventArgs e)
         {
+            State_support = true;
             if ((txtBOX_DESC.Text).Trim() == "")
             {
                 MessageBox.Show("지원상세 내용이 없습니다.");
@@ -510,18 +518,30 @@ namespace Client_support_report_temporary
 
         private void cmbbox_Worker_SelectedIndexChanged(object sender, EventArgs e)
         {
+            btn_Start_log.Enabled = true;
+            btn_Restart_log.Enabled = false;
+            btn_Hold_log.Enabled = false;
+            btn_CLOSE_log.Enabled = false;
             //Current_Cmb_Texts_Update();
             // 아무것도하지말것 ,      임시저장 xml 를  Form1_Close시로 변경
         }
 
         private void cmbbox_SprtMethod_SelectedIndexChanged(object sender, EventArgs e)
         {
+            btn_Start_log.Enabled = true;
+            btn_Restart_log.Enabled = false;
+            btn_Hold_log.Enabled = false;
+            btn_CLOSE_log.Enabled = false;
             //Current_Cmb_Texts_Update();
             // 아무것도하지말것 ,      임시저장 xml 를  Form1_Close시로 변경
         }
 
         private void cmbbox_SprtType_SelectedIndexChanged(object sender, EventArgs e)
         {
+            btn_Start_log.Enabled = true;
+            btn_Restart_log.Enabled = false;
+            btn_Hold_log.Enabled = false;
+            btn_CLOSE_log.Enabled = false;
             //Current_Cmb_Texts_Update(); 
             // 아무것도하지말것 ,      임시저장 xml 를  Form1_Close시로 변경
         }
@@ -540,6 +560,7 @@ namespace Client_support_report_temporary
 
         private void btn_Hold_log_Click(object sender, EventArgs e)
         {
+            State_support = false;
             GSTATUS = "HOLDED";
 
             Save_Log_Info("HOLD",REG_ID); // log 파일에 중단 기록을 남김
@@ -552,6 +573,7 @@ namespace Client_support_report_temporary
 
         private void btn_Restart_log_Click(object sender, EventArgs e)
         {
+            State_support = true;
             if (LSTBOX_ING.SelectedItem == null)
             {
                 MessageBox.Show("아래 List에서 항목을 하나 선택하십시요.");
@@ -571,15 +593,20 @@ namespace Client_support_report_temporary
 
         private void btn_CLOSE_log_Click(object sender, EventArgs e)
         {
+            State_support = false;
             GSTATUS = "CLOSED";
-            Delete_Inwork_info(LSTBOX_ING.SelectedItem.ToString());
+            Sign_of_NotApply_ListBox_Change = true;
             Save_Log_Info("FINISH", REG_ID); // log 파일에 종료 기록을 남김
-            LSTBOX_ING.Items.Remove(LSTBOX_ING.SelectedItem.ToString());
+            Delete_Inwork_info(LSTBOX_ING.SelectedItem.ToString());            
+            string Temp = LSTBOX_ING.SelectedItem.ToString();
+            
+            LSTBOX_ING.Items.Remove(Temp);
             txtBOX_DESC.Text = "";
             btn_Hold_log.Enabled = false;
             btn_CLOSE_log.Enabled = false;
             btn_Start_log.Enabled = true;
             btn_Restart_log.Enabled = true;
+            Sign_of_NotApply_ListBox_Change = false;
         }
 
         private void loadxmltoForm()
@@ -662,7 +689,10 @@ namespace Client_support_report_temporary
             DT = DateTime.Today;
             Console.WriteLine("Log_" + DT.Year.ToString() + String.Format("{0,2:00}", DT.Month)); //+ String.Format("{0,2:00}", DT.Day));
             LogFIleName = "Log_" + DT.Year.ToString() + String.Format("{0,2:00}", DT.Month); //+ String.Format("{0,2:00}", DT.Day);
+
+
             sXmlOutpurPath = sDirPath + "\\" + LogFIleName + ".xml";
+            Console.WriteLine(sXmlOutpurPath);
             Load_LOG_file(sXmlOutpurPath);
 
             XmlNode root = xmlLogDoc.DocumentElement;
@@ -998,6 +1028,91 @@ namespace Client_support_report_temporary
                 }
             }
         }
+        private void SelectedDescriptionChange(object sender, EventArgs e)
+        {
+            if ( !Sign_of_NotApply_ListBox_Change )
+            {
+                SELDescChange();
+            }
+            
+        }
+
+        private void SELDescChange()
+        {
+            string LogFIleName;
+            DT = DateTime.Today;
+            LogFIleName = "Log_" + DT.Year.ToString() + String.Format("{0,2:00}", DT.Month); //+ String.Format("{0,2:00}", DT.Day);
+
+            sXmlOutpurPath = sDirPath + "\\" + LogFIleName + ".xml";
+            Console.WriteLine(sXmlOutpurPath);
+            Load_LOG_file(sXmlOutpurPath);
+
+            XmlNodeList Xlist = xmlSettingDoc.SelectNodes("//Root//InWork");
+            XmlNode LogRoot = xmlLogDoc.SelectSingleNode("//Root");
+            XmlNode LogLog = null;
+            XmlNode LogChild = null;
+            bool Flag;
+            Flag = true;
+
+            foreach (XmlNode AA in Xlist)
+            {
+                Console.WriteLine(AA.Name);
+                foreach (XmlNode BB in AA.ChildNodes)
+                {
+                    Console.WriteLine(BB.Name);
+                    if (BB.Name == "TEXT")
+                    {
+                        Console.WriteLine(BB.InnerText);
+                        Console.WriteLine((string)LSTBOX_ING.SelectedItem.ToString());
+                        if (BB.InnerText == (string)LSTBOX_ING.SelectedItem.ToString())
+                        {
+                            Console.WriteLine("BB : " + BB.ParentNode.FirstChild.InnerText);
+                            Console.WriteLine(LogRoot.Name);
+                            LogLog = LogRoot.LastChild;
+                            Console.WriteLine("LogLog 첫번째 노드의 Text: " + LogLog.FirstChild.InnerText);
+                            while (BB.ParentNode.FirstChild.InnerText != LogLog.FirstChild.InnerText)
+                            {
+                                LogLog = LogLog.PreviousSibling;
+                                Console.WriteLine("++");
+                            }
+                            LogChild = LogLog.FirstChild;
+                            // 첫번째는 그냥 재낀다  IDd인걸 알기에 
+                            Console.WriteLine(LogChild.Name);
+                            while (LogChild.Name != "STATUS")
+                            {
+                                LogChild = LogChild.NextSibling;
+                                Console.WriteLine("+");
+                            }
+                            Console.WriteLine(LogChild.Name + "," + LogChild.InnerText);
+
+                            if (LogChild.InnerText == "START" || LogChild.InnerText == "RESTART")
+                            {
+                                btn_Start_log.Enabled = false;
+                                btn_Restart_log.Enabled = false;
+                                btn_Hold_log.Enabled = true;
+                                btn_CLOSE_log.Enabled = true;
+                            }
+                            else
+                            {
+                                btn_Start_log.Enabled = false;
+                                btn_Restart_log.Enabled = true;
+                                btn_Hold_log.Enabled = false;
+                                btn_CLOSE_log.Enabled = false;
+                            }
+
+                            Console.WriteLine("break");
+                            Flag = false;
+                            break;
+                        }
+                    }
+                }
+                if (!Flag)
+                {
+                    break;
+                }
+            }
+        }
+            
 
     }
 }

@@ -354,6 +354,7 @@
             this.LSTBOX_ING.Name = "LSTBOX_ING";
             this.LSTBOX_ING.Size = new System.Drawing.Size(564, 72);
             this.LSTBOX_ING.TabIndex = 22;
+            this.LSTBOX_ING.SelectedIndexChanged += new System.EventHandler(this.SelectedDescriptionChange);
             // 
             // label6
             // 
