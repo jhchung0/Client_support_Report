@@ -281,7 +281,7 @@ namespace Client_support_report_temporary
 
             if (cmbbox_Customer.Text == "")
             {
-                MessageBox.Show("고객사가 선택되지 않습니다.");
+                MessageBox.Show("고객사가 선택되지 않았습니다.");
             } else
             {
                 tbox_AddEdit_Common.Text = cmbbox_Customer.Text;
@@ -396,7 +396,7 @@ namespace Client_support_report_temporary
 
             if (cmbbox_CustUser.Text == "")
             {
-                MessageBox.Show("사용자가 선택되지 않습니다.");
+                MessageBox.Show("사용자가 선택되지 않았습니다.");
             }
             else
             {
@@ -419,7 +419,7 @@ namespace Client_support_report_temporary
 
                             if (cmbbox_Customer.Text == "")
                             {
-                                MessageBox.Show("고객사가 선택되지 않습니다.");
+                                MessageBox.Show("고객사가 선택되지 않았습니다.");
                             }
                             else
                             {
@@ -762,7 +762,6 @@ namespace Client_support_report_temporary
         private void Load_LOG_file(string LOGFILEPath)
         // LOG 파일의 초기 load 
         {
-
             FileInfo fi1 = new FileInfo(LOGFILEPath);
             if (fi1.Exists == false)
             {
@@ -1112,7 +1111,59 @@ namespace Client_support_report_temporary
                 }
             }
         }
-            
 
+        private void btn_Worker_Edit_Click(object sender, EventArgs e)
+        {
+            if ( cmbbox_Worker.Text == "")
+            {
+                MessageBox.Show("작업자가 선택되지 않습니다.");
+            }
+            else
+            {
+                tbox_AddEdit_Common.Text = cmbbox_Worker.Text;
+                sOPT_stype = "Worker";
+                sOPT_AE = "EDIT";
+                panel1.Location = new Point(12, 145);
+                panel3.Location = new Point(12, 400);
+                lbl_AddEidt_common.Text = "작업자수정";
+                btn_AddEdit_common.Text = "UPDATE";
+            }
+        }
+
+        private void btn_SprtMethod_Edit_Click(object sender, EventArgs e)
+        {
+            if ( cmbbox_SprtMethod.Text == "")
+            {
+                MessageBox.Show("지원방법이 선택되지 않았습니다.");
+            }
+            else
+            {
+                tbox_AddEdit_Common.Text = cmbbox_SprtMethod.Text;
+                sOPT_stype = "SupportMethod";
+                sOPT_AE = "EDIT";
+                panel1.Location = new Point(12, 145);
+                panel3.Location = new Point(12, 400);
+                lbl_AddEidt_common.Text = "지원방법수정";
+                btn_AddEdit_common.Text = "UPDATE";
+            }
+        }
+
+        private void BTN_SprtType_Edit_Click(object sender, EventArgs e)
+        {
+            if ( cmbbox_SprtType.Text == "")
+            {
+                MessageBox.Show("지원유형이 선택되지 않았습니다.");
+            }
+            else
+            {
+                tbox_AddEdit_Common.Text = cmbbox_SprtType.Text;
+                sOPT_stype = "SupportType";
+                sOPT_AE = "EDIT";
+                panel1.Location = new Point(12, 145);
+                panel3.Location = new Point(12, 400);
+                lbl_AddEidt_common.Text = "지원유형수정";
+                btn_AddEdit_common.Text = "UPDATE";
+            }
+        }
     }
 }

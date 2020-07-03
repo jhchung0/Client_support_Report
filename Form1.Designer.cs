@@ -197,6 +197,7 @@
             this.BTN_SprtType_Edit.TabIndex = 14;
             this.BTN_SprtType_Edit.Text = "수정";
             this.BTN_SprtType_Edit.UseVisualStyleBackColor = true;
+            this.BTN_SprtType_Edit.Click += new System.EventHandler(this.BTN_SprtType_Edit_Click);
             // 
             // btn_SprtType_Add
             // 
@@ -216,6 +217,7 @@
             this.btn_SprtMethod_Edit.TabIndex = 12;
             this.btn_SprtMethod_Edit.Text = "수정";
             this.btn_SprtMethod_Edit.UseVisualStyleBackColor = true;
+            this.btn_SprtMethod_Edit.Click += new System.EventHandler(this.btn_SprtMethod_Edit_Click);
             // 
             // btn_SprtMethod_Add
             // 
@@ -235,6 +237,7 @@
             this.btn_Worker_Edit.TabIndex = 10;
             this.btn_Worker_Edit.Text = "수정";
             this.btn_Worker_Edit.UseVisualStyleBackColor = true;
+            this.btn_Worker_Edit.Click += new System.EventHandler(this.btn_Worker_Edit_Click);
             // 
             // btn_Worker_Add
             // 
@@ -472,5 +475,7 @@
         private System.Windows.Forms.Label lbl_AddEidt_common;
         private System.Windows.Forms.Button btn_AddEditCancel;
     }
+
+
 }
 
